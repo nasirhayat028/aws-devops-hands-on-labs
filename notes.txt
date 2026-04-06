@@ -444,3 +444,63 @@ it waste my few hours of time it goeas failed again and again i just not set the
 
 
 Documented Donee
+
+CodeBuild - Environment Variables
+. Default Environment Variables
+• Defined and provided by AWS
+• AWS_DEFAULT_REGION, CODEBUILD_BUILD_ARN, CODEBUILD_BUILD_ID,
+CODEBUILD_BUILD_IMAGE,...
+. Custom Environment Variables
+• Static - defined at build time (override using start-build API call)
+• Dynamic – using SSM Parameter Store and Secrets Manager
+(CodeBuild Project
+Secrets Manager C
+Environment Variables
+)
+Key Value
+AWS_DEFAULT_REGION eu-west-2 Default
+Parameter Store
+ENVIRONMENT Production Custom (Static)
+(MY_SECRET_TOKEN)
+SECRET_TOKEN MY_SECRET_TOKEN Custom (Dynamic)
+
+
+CodeBuild - Security
+. CodeBuild Service Role allows CodeBuild to access AWS
+resources on your behalf (assign the required permissions)
+Use cases:
+• Download code from CodeCommit repository
+• Fetch parameters from SSM Parameter Store
+• Upload build artifacts to S3 bucket
+• Fetch secrets from Secrets Manager
+• Store logs in CloudWatch Logs
+• In-transit and at-rest data encryption (cache, logs, ...)
+• Build output artifact encryption (requires access to KMS)
+
+
+CodeBuild - Build Badges
+
+• Dynamically generated badge that displays the status of the latest build
+• Can be accessed through a public URL for your CodeBuild project
+• Supported for CodeCommit, GitHub, and BitBucket
+• Note: Badges are available at the branch level
+
+CodeBuild-Triggers
+event trigger
+CodeCommit EventBridge CodeBuild
+<1> A
+event trigger trigger
+CodeCommit EventBridge Lambda CodeBuild
+C Hook Web trigger
+event
+GitHub CodeBuild
+
+CodeBuild - Test Reports
+• Contains details about tests that are run during builds
+• Unit tests, configuration tests, functional tests
+• Create your test cases with any test framework that
+can create report files in the following format:
+⚫ JUnit XML, NUnit XML, NUnit3 XML
+⚫ Cucumber JSON, TestNG XML, Visual Studio TRX
+Create a test report and add a Report Group name
+in buildspec.yml file with information about your tests
