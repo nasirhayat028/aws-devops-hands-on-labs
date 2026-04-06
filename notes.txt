@@ -62,6 +62,10 @@ CodeCommit - Security
 • Use an IAM Role in your AWS account and use AWS STS (AssumeRole API)
 
 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ---------
 DAY_02
@@ -192,3 +196,206 @@ information in the console
 If pipeline can't perform an action, make sure the "IAM Service Role"
 attached does have enough IAM permissions (IAM Policy)
 AWS Cloud Trail can be used to audit AWS API calls
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+___________________________________
+
+
+DAY_03: 
+
+CodePipeline - CloudFormation as a Target
+Action Modes
+• Create or Replace a Change Set, Execute a Change Set
+Create or Update a Stack, Delete a Stack, Replace a Failed Stack
+• Template Parameter Overrides
+• Specify a JSON object to override parameter values
+• Retrives the parameter value from CodePipeline Input Artifact
+
+{
+"ParameterName": {
+"Fn::GetParam": [
+"ArtifactName",
+"config-file-name.json",
+]
+}
+}
+"ParamName"
+Retrieves ParamName parameter value from
+CodePipeline input artifact config-file-name ison
+
+• All parameter names must be present in the template
+• Static-use template configuration file (recommended)
+Dynamic - use parameter overrides
+
+___________________________________
+CodePipeline Advanced
+
+CodePipeline - Best Practices
+
+~ One CodePipeline, One CodeDeploy,
+Parallel deploy to multiple
+Deployment Groups
+
+~ Parallel Actions using in
+a Stage using RunOrder
+
+
+~ Deploy to Pre-Prod before
+Deploying to Prod
+
+
+CodePipeline & EventBridge
+• EventBridge - detect and react to changes in execution states (e.g.,
+intercept failures at certain stages)
+
+CodePipeline - Invoke Action
+• Lambda - invokes a Lambda function within a Pipeline
+
+Step Functions - starts a State Machine within a Pipeline
+
+
+
+CodePipeline - Multi Region.
+• Actions in your pipeline can be in different regions
+• Example: deploy a Lambda function through CloudFormation into multiple regions
+• S3 Artifact Stores must be defined in each region where you have actions
+CodePipeline must have read/write access into every artifact buckets
+If you use the console default artifact buckets are configured, else you must create them
+CodePipeline handles the copying of input artifacts from one AWS Region to
+the other Regions when performing cross-region actions
+• In your cross-region actions, only reference the name of the input artifacts
+Artifact store
+Region Туре Location
+eu-west-1 53 codepipeline-eu-west-1-460886087071
+eu-central-1 S3 cadepipeline-eu-central-1-625328630265
+
+
+___________________________________
+
+AWS CodeBuild
+• Source - CodeCommit, S3, Bitbucket, GitHub
+• Build instructions: Code file buildspec.yml or insert manually in Console
+Output logs can be stored in Amazon S3 & CloudWatch Logs
+• Use CloudWatch Metrics to monitor build statistics
+• Use EventBridge to detect failed builds and trigger notifications
+• Use CloudWatch Alarms to notify if you need "thresholds" for failures
+• . Build Projects can be defined within CodePipeline or CodeBuild
+
+CodeBuild - Supported Environments
+• Java
+• . Ruby
+• Python
+Go
+• Node.js
+• Android
+⚫ .NET Core
+⚫ PHP
+• . Docker - extend any environment you like
+
+CodeBuild How it Works
+Jaga
+CodeCommit CodeBuild
+artifacts
+(Source) S3 Bucket
+CodeBuild
+Container
+*** YANL
+Source code + buildspec.yml running instructions from buildspec.yml
+store logs
+store
+retrieve
+reusbale pieces
+docker
+Docker Image S3 Bucket (Cache) Amazon S3 CloudWatch Logs
+(Prepackaged or Custom) (optional)
+
+
+
+CodeBuild - buildspec.yml
+
+version: 0.2
+env:
+variables:
+JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+parameter-store:
+LOGIN_PASSWORD: /CodeBuild/dockerLoginPassword
+phases:
+install:
+commands:
+- echo "Entered the install phase..."
+- apt-get update -y
+- apt-get install -y naven
+pre_build:
+commands:
+- echo "Entered the pre_build phase..."
+-docker login -u User -p $LOGIN_PASSWORD
+build:
+commands:
+- echo "Entered the build phase..."
+- echo "Build started on 'date'"
+-mvn install
+post_build:
+commands:
+- echo "Entered the post_build phase..."
+- echo "Build completed on 'date'"
+artifacts:
+files:
+-target/messageUtil-1.0.jar
+cache:
+paths:
+- "/root/.m2/**/*"
+
+
+
+buildspec.yml file must be at the root of your code
+env - define environment variables
+• variables - plaintext variables
+⚫ parameter-store - variables stored in SSM Parameter Store
+• secrets-manager- variables stored in AWS Secrets Manager
+phases - specify commands to run:
+• install - install dependencies you may need for your build
+. pre_build-final commands to execute before build
+• Build - actual build commands
+• post_build - finishing touches (e.g., zip output)
+artifacts – what to upload to S3 (encrypted with KMS)
+• cache files to cache (usually dependencies) to S3 for
+future build speedup
+
+
+
+CodeBuild - Inside VPC
+• By default, your CodeBuild containers are
+launched outside your VPC
+• It cannot access resources in a VPC
+• You can specify a VPC configuration:
+• ⚫ VPC ID
+⚫ • Subnet IDs
+• Security Group IDs
+Then your build can access resources in your
+VPC (e.g., RDS, ElastiCache, EC2, ALB, ...)
+• Use cases: integration tests, data query,
+internal load balancers, ...
+
+
+
+
+LAB Works
+
+in AWS go to CODEBUILD and create app..
+in source select github then connect github with aws ..
+after that select the repo..
+tick rebuild everytime code commit
+
+operating system ubuntu runtime standardimage will aws/CodeBuild/standard7.0 image will always use the latesst image for run time
+then give name to role like CodeBuildDemoServiceRole
+additional explore if uh want extra tools like timeout time,VPC etc..
+
+then under build spec 
+USE a buildspec file (in your app the buildspec.yml must have in the root folder otherwise it will failed during creation application)
