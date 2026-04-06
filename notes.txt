@@ -386,16 +386,58 @@ internal load balancers, ...
 
 
 
+
+
+
+
+adding toprod deployement..
+action group 
+named it DEploytoprod etc..
+actionprovider will AWS Elastic Beanstalk
+input artificats will be source artificats
+app name will already have just slect and enviroment thiss time will be prod
+
+for this we will add maunal approval also .. beacuase its a producation level deployment
+add action nameed manual approval
+action provider maunal approval
+
+
+
+
 LAB Works
 
 in AWS go to CODEBUILD and create app..
-in source select github then connect github with aws ..
+
+in source 
+select github then connect github with aws ..
 after that select the repo..
 tick rebuild everytime code commit
 
+under primary source.. 
 operating system ubuntu runtime standardimage will aws/CodeBuild/standard7.0 image will always use the latesst image for run time
 then give name to role like CodeBuildDemoServiceRole
 additional explore if uh want extra tools like timeout time,VPC etc..
 
 then under build spec 
 USE a buildspec file (in your app the buildspec.yml must have in the root folder otherwise it will failed during creation application)
+
+after that go and create a buildspec.yml file in root of application..
+and commit it .. the build will automatically  run just beacuase of triger.. in main brach push\
+
+now we will go towards codepipeline...
+for this first we edit the build and untick the auto triger which was auto build our app whe something push on github..
+
+
+
+\after this go to pipeline .. 
+
+like previously we did directly deploy this time we will not deploy it directly we all add a stage of Test just befor the deploying
+
+and in action group set action name like CodeBuildTest the action provider will AWSCodeBuild and region will same..
+name will also ike myFirstBuild
+no environment needed for now!!
+single build is ok 
+output Artifact we wall say this OutputoffTest etc;
+click done.
+
+it waste my few hours of time it goeas failed again and again i just not set the role to pipeline remember to add pipeline "AWSCodeBuildDeveloperAccess" role

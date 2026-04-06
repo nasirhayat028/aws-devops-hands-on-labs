@@ -302,4 +302,4 @@ CodeBuild access kar sakta hai:
 
 ---
 
-CodeBuild ek “serverless build machine” hai jo auto-scale karta hai aur DevOps ko simplify karta hai.
+  CodeBuild ek “serverless build machine” hai jo auto-scale karta hai aur DevOps ko simplify karta hai.
