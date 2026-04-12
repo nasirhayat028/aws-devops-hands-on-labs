@@ -908,7 +908,8 @@ now how we can levrage this our named like demo repo for this we click on view c
 
 for this open cloudshell in another tap
 
-go to codeartificate and view the instraction the first one may not work just pip and pip3 downloaded error
+go to codeartificate and view the instraction the first one may not work just pip and pip3 downloaded error or because of updates it may work now...
+from this aws codeartifact login --tool pip --repository Demoo --domain my-company --domain-owner 771844493079 --region us-east-1
 
 we will try 2 instructions which will be maunal
 
