@@ -1007,3 +1007,129 @@ Can be run on a schedule (weekly, whenever packages are updated, etc...)
 • Free service (only pay for the underlying resources)
 Can publish AMI to multiple regions and multiple accounts
 
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+AWS Amplify - web and mobile applications
+• A set of tools and services that helps you develop and deploy scalable full stack web and mobile
+applications
+Authentication, Storage, API (REST, GraphQL), CI/CD, PubSub, Analytics, AI/ML Predictions,
+Monitoring, ...
+• Connect your source code from GitHub, AWS CodeCommit, Bitbucket, GitLab, or upload directly
+
+AWS Amplify - Continuous Deployment
+Connect to CodeCommit and have one deployment per branch
+Connect your application to a custom domain (e.g., Route 53)
+
+
+___________________________________
+
+AWS CloudFormation
+CloudFormation is a declarative way of outlining your AWS
+Infrastructure, for any resources (most of them are supported)
+• For example, within a CloudFormation template, you say:
+• I want a security group
+• I want two EC2 instances using this security group
+• I want two Elastic IPs for these EC2 instances
+⚫ I want an S3 bucket
+• I want a load balancer (ELB) in front of these EC2 instances
+• Then CloudFormation creates those for you, in the right order, with the
+exact configuration that you specify
+
+Benefits of AWS CloudFormation (1/2)
+• Infrastructure as code
+• No resources are manually created, which is excellent for control
+• The code can be version controlled for example using Git
+• Changes to the infrastructure are reviewed through code
+• Cost
+Each resources within the stack is tagged with an identifier so you can easily see ho
+much a stack costs you
+You can estimate the costs of your resources using the CloudFormation template
+• Savings strategy: In Dev, you could automation deletion of templates at 5 PM and
+recreated at 8 AM, safely
+
+Productivity
+• Ability to destroy and re-create an infrastructure on the cloud on the fly
+• Automated generation of Diagram for your templates!
+Declarative programming (no need to figure out ordering and orchestration)
+Separation of concern: create many stacks for many apps, and many layers. Ex
+• VPC stacks
+• Network stacks
+• App stacks
+• Don't re-invent the wheel
+Leverage existing templates on the web!
+Leverage the documentation
+
+How CloudFormation Works
+Templates must be uploaded in S3 and then referenced in
+CloudFormation
+To update a template, we can't edit previous ones. We have to re-
+upload a new version of the template to AWS
+• Stacks are identified by a name
+Deleting a stack deletes every single artifact that was created by
+CloudFormation.
+
+Deploying CloudFormation Templates
+• Manual way
+Editing templates in Application Composer or code editor g
+Using the console to input parameters, etc...
+• We'll mostly do this way in the course for learning purposes
+• . Automated way
+Editing templates in a YAML file
+Using the AWS CLI (Command Line Interface) to deploy the
+templates, or using a Continuous Delivery (CD) tool
+• Recommended way when you fully want to automate your flow
+
+CloudFormation - Building Blocks
+• Template's Components
+AWSTemplateFormatVersion - identifies the capabilities of the template "2010-09-09"
+Description - comments about the template
+• Resources (MANDATORY) - your AWS resources declared in the template
+• Parameters - the dynamic inputs for your template
+• Mappings - the static variables for your template
+• Outputs references to what has been created
+• Conditionals – list of conditions to perform resource creation
+• Template's Helpers
+⚫ References
+• Functions
+
+
+___________________________________
+LABB WORKKK....
+
+first use nvirginia us-east-1 region it's good for learning and many more reasins...
+
+Go to CloudFormation > Stack
+
+create a stack
+there you will see prepare template option..
+here we will use the simple template
+under the list of simple template here we use wordpress blog
+it doesn't matter what yoi=u choose
+
+click to view in application Composer
+once you are in applicaition Composer you will see how our application is made
+click template and also you will see yaml or json 
+under the canvas you can view evrything in details also 
+you can explore betterr...
+after this we will not deploy this becaus of cost..
+
+after this again come to the step create stack 
+this time we will use our own code 
+
+0-just-ec2.yml
+under this you will have
+
+Resources:
+    MyInstance:
+        Type: AWS::EC2::Instance
+        Properties:
+            availabilityZOne: us-east-1a
+            ImageId: ami-0a3c3a20c096f377
+            InstanceType: t2.micro
+
+
+then go to create stack name it like Demoetc..
+for now leave other all things and just click on create
